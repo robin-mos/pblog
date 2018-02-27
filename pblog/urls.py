@@ -14,8 +14,32 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-
+from django.conf.urls import include, url
+from DjangoUeditor import urls as djud_urls
+from django.conf import settings
+import blog.views
+########################
+# Version V1.0
+# Release 1.0
+# Author: LiXiangping
+# Email: 752070569@qq.com
+# Date: 2018/02/24
+# Description:过滤请求地址
+#########################
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
+    url(r'^ueditor/',include(djud_urls)),
+    url(r'^test/',blog.views.test,name='blog test'),
+    url(r'^detail/(?P<id>\d+)/$',blog.views.Detail,name="blog_detail"),
+    url(r'^home/',blog.views.Home,name="blog_home"),
 ]
+
+
+###############
+# Version V1.0
+# Release 1.0
+# Description: 让django访问百度开发的DjangoUeditor模块
+###############
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
